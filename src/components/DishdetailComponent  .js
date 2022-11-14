@@ -23,6 +23,7 @@ class DishDetail extends Component {
     if (dish != null) {
       return (
         <div>
+          <h4>Comments</h4>
           {dish.comments.map(({ id, comment, author, date }) => {
             return (
               <ul key={id} style={{ listStyle: "none" }}>
@@ -40,13 +41,12 @@ class DishDetail extends Component {
     }
   }
   render() {
-    const { selectedNewDish } = this.props;
+    const { dish } = this.props;
     return (
       <div className="row">
-        {this.renderDish(selectedNewDish)}
+        {this.renderDish(dish)}
         <div className="col-12 col-md-5 m-1">
-          <h4>Comments</h4>
-          {this.renderComments(selectedNewDish)}
+          {this.renderComments(dish)}
         </div>
       </div>
     );
