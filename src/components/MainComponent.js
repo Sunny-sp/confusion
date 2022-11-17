@@ -25,7 +25,7 @@ class Main extends Component{
               </div>
             </Navbar >
             <Menu dishes={this.state.dishes} onDishSelect = {(dishId)=>this.handleDishSelect(dishId)}/>
-            <DishDetail  dish = {this.state.dishes.filter(dish=>dish.id===this.state.selectedDishId)[0]}/>
+            <DishDetail dish = {this.state.dishes.filter((dish)=>dish.id===this.state.selectedDishId)[0]}/>
           </div>
         )
     }
