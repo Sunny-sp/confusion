@@ -1,10 +1,14 @@
-import Main from './components/MainComponent';
-function App() {
+import Main from './components/MainComponent'
+import './App.css'
+import React from 'react'
+function App () {
   return (
-    <div>
-      <Main/>
-    </div>
-  );
+    <React.Fragment>
+      <div>
+        <Main />
+      </div>
+    </React.Fragment>
+  )
 }
 
-export default App;
+export default App
