@@ -1,7 +1,7 @@
-import { Card, CardImg, CardImgOverlay, CardTitle } from "reactstrap";
-import React from "react";
+import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap'
+import React from 'react'
 
-function RenderMenuItem({ dish, dishSelect }) {
+function RenderMenuItem ({ dish, dishSelect }) {
   return (
     <Card>
     <CardImg width="100%" src={dish.image} alt={dish.name} />
@@ -18,13 +18,13 @@ const Menu = (props) => {
       <div key={dish.id} className="col-12 col-md-5 m-1">
         <RenderMenuItem dish={dish} dishSelect={props.onDishSelect}/>
       </div>
-    );
-  });
+    )
+  })
   return (
     <div className="container">
       <div className="row">{menu}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Menu;
+export default Menu
