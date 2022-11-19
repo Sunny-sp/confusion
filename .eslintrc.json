@@ -17,6 +17,8 @@
         "react"
     ],
     "rules": {
-        "react/prop-types": "off"
+        "semi":[2,"always"],
+        "react/prop-types": "off",
+        "require-jsdoc":"off"
     }
 }
