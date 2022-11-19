@@ -1,14 +1,15 @@
-import Main from './components/MainComponent'
-import './App.css'
-import React from 'react'
+import Main from './components/MainComponent';
+import './App.css';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 function App () {
   return (
-    <React.Fragment>
+    <BrowserRouter>
       <div>
         <Main />
       </div>
-    </React.Fragment>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

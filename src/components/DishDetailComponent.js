@@ -1,6 +1,6 @@
-import React from 'react'
-import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap'
-import moment from 'moment'
+import React from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
+import moment from 'moment';
 
 function RenderDish ({ dish }) {
   if (dish != null) {
@@ -14,9 +14,9 @@ function RenderDish ({ dish }) {
             </CardBody>
           </Card>
         </div>
-    )
+    );
   } else {
-    return <div></div>
+    return <div></div>;
   }
 }
 function RenderComments ({ dish }) {
@@ -32,14 +32,14 @@ function RenderComments ({ dish }) {
                   --{author}, {moment(date).format('MMM DD, yyyy')}
                 </p>
               </div>
-            )
+            );
           })}
         </div>
-    )
+    );
   } else {
     return (
         <div></div>
-    )
+    );
   }
 }
 function DishDetail (props) {
@@ -52,7 +52,7 @@ function DishDetail (props) {
         </div>
       </div>
       </div>
-  )
+  );
 }
 
-export default DishDetail
+export default DishDetail;
