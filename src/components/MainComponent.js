@@ -9,6 +9,7 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishDetailComponent';
+import AboutUs from './AboutComponent';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 class Main extends Component {
   constructor (props) {
@@ -50,6 +51,7 @@ class Main extends Component {
             <Route exact path='/menu'element={<Menu dishes={this.state.dishes}/>}/>
             <Route path='/menu/:id' element={<DishWithId/>}/>
             <Route exect path='/contactus' element={<Contact/>}/>
+            <Route exact path='/aboutus' element={<AboutUs leaders={this.state.leaders}/>} />
             <Route path='*' element={<Navigate to='/home'/>}/>
           </Routes>
         <Footer />
