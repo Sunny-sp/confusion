@@ -9,7 +9,7 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishDetailComponent';
-import AboutUs from './AboutUs';
+import AboutUs from './AboutComponent';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 class Main extends Component {
   constructor (props) {
