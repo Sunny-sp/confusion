@@ -11,10 +11,53 @@ class Contact extends Component {
       email: '',
       agree: false,
       contactType: 'Tel.',
-      message: ''
+      message: '',
+      touched: {
+        firstName: false,
+        lastName: false,
+        telNum: false,
+        email: false
+      }
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+  }
+
+  handleBlur = (field) => (event) => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true }
+    });
+  };
+
+  validate (firstName, lastName, telNum, email) {
+    const errors = {
+      firstName: '',
+      lastName: '',
+      telNum: '',
+      email: ''
+    };
+    if (this.state.touched.firstName && firstName.length < 3) {
+      errors.firstName = 'First Name should be >= 3 characters';
+    } else if (this.state.touched.firstName && firstName.length > 10) {
+      errors.firstName = 'First Name should be <= 10 characters';
+    }
+
+    if (this.state.touched.lastName && lastName.length < 3) {
+      errors.lastName = 'First Name should be >= 3 characters';
+    } else if (this.state.touched.lastName && lastName.length > 10) {
+      errors.lastName = 'First Name should be <= 10 characters';
+    }
+
+    const reg = /^\d+$/;
+    if (this.state.touched.telNum && !reg.test(telNum)) {
+      errors.telNum = 'Tel. Number should contain only numbers';
+    }
+
+    if (this.state.touched.email && email.split('').filter(x => x === '@').length !== 1) {
+      errors.email = 'Email should contain a @';
+    }
+    return errors;
   }
 
   handleSubmit (event) {
@@ -32,6 +75,7 @@ class Contact extends Component {
   }
 
   render () {
+    const errors = this.validate(this.state.firstName, this.state.lastName, this.state.telNum, this.state.email);
     return (
         <div className="container">
             <div className='row'>
@@ -80,28 +124,37 @@ class Contact extends Component {
                         <Label htmlFor='firstname' md={2} >FirstName</Label>
                         <Col md={10}>
                             <input type='text' id='firstName' name='firstName' placeholder='First Name' value={this.state.firstName}
-                            onChange={this.handleInputChange} />
+                            onChange={this.handleInputChange}
+                            onBlur={this.handleBlur('firstName')} /><br/>
+                            <span style={{ color: 'red' }}>{errors.firstName}</span>
                         </Col>
                     </FormGroup>
                     <FormGroup row>
                         <Label htmlFor='lastname' md={2} >LastName</Label>
                         <Col md={10}>
                             <input type='text' id='lastName' name='lastName' placeholder='Last Name' value={this.state.lastName}
-                            onChange={this.handleInputChange} />
+                            onChange={this.handleInputChange}
+                            onBlur={this.handleBlur('lastName')} /><br/>
+                            <span style={{ color: 'red' }}>{errors.lastName}</span>
                         </Col>
                     </FormGroup>
                     <FormGroup row>
                         <Label htmlFor='telnum' md={2} >Contact Tel.</Label>
                         <Col md={10}>
                             <input type='tel' id='telNum' name='telNum' placeholder='Tel. Number' value={this.state.telNum}
-                            onChange={this.handleInputChange} />
+                            onChange={this.handleInputChange}
+                            onBlur={this.handleBlur('telNum')} /><br/>
+                            <span style={{ color: 'red' }}>{errors.telNum}</span>
                         </Col>
                     </FormGroup>
                     <FormGroup row>
                         <Label htmlFor='email' md={2} >Email</Label>
                         <Col md={10}>
                             <input type='text' id='email' name='email' value={this.state.email}
-                            onChange={this.handleInputChange} />
+                            onChange={this.handleInputChange}
+                            onInvalid = {errors.firstName !== ''}
+                            onBlur={this.handleBlur('email')}/><br/>
+                            <span style={{ color: 'red' }}>{errors.email}</span>
                         </Col>
                     </FormGroup>
                     <FormGroup row>
@@ -109,7 +162,7 @@ class Contact extends Component {
                             <FormGroup check>
                             <Label check/>
                                 <input type='checkbox' name='agree' checked={this.state.agree}
-                                onChange={this.handleInputChange} />
+                                onChange={this.handleInputChange}/>
                                 <strong>May we contact you?</strong>
                             </FormGroup>
                         </Col>
@@ -124,8 +177,8 @@ class Contact extends Component {
                         <Label htmlFor='message' md={2} >Your Feedback</Label>
                         <Col md={10}>
                             <Input type='textarea' id='message' name='message'
-                            rows='12' value={this.state.message} onChange={this.handleInputChange}
-                            ></Input>
+                            rows='12' value={this.state.message}
+                            onChange={this.handleInputChange}></Input>
                         </Col>
                     </FormGroup>
                     <FormGroup row>
