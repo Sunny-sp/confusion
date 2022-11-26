@@ -55,10 +55,10 @@ class Header extends Component {
                   <Link className="nav-link" to='/contactus'><span className="fa fa-address-card fa-lg"></span> Contact Us</Link>
                 </NavItem>
               </Nav>
-              <Nav className='ml-auto' Navbar>
+              <Nav className='ms-auto' Navbar>
                 <NavItem>
-                  <Button onClick={this.toggleModal}>
-                    <span className='fa fa-sign-in'></span> Login
+                  <Button outline onClick={this.toggleModal}>
+                    <span className='fa fa-sign-in fa-lg'></span> Login
                   </Button>
                 </NavItem>
               </Nav>
