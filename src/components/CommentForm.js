@@ -11,7 +11,8 @@ function CommentForm () {
     setModalOpen(!isModalOpen);
   };
   const handleSubmit = (values) => {
-    alert(JSON.stringify(values));
+    toggleModal();
+    alert('User details: ' + JSON.stringify(values));
   };
   return (
     <>
@@ -59,7 +60,7 @@ function CommentForm () {
                 </Row>
                 <Row className='form-group m-1'>
                     <Col>
-                        <Button color='primary'>Submit</Button>
+                        <Button type='submit' color='primary'>Submit</Button>
                     </Col>
                 </Row>
             </LocalForm>
