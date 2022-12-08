@@ -62,15 +62,15 @@ function About (props) {
                 <div className='col-12'>
                     <Card>
                     <CardBody className="bg-faded">
-                                <blockquote className="blockquote">
-                                    <p className="mb-0">You better cut the pizza in four pieces because
-                                        Im not hungry enough to eat six.</p><br/>
-                                    <footer className="blockquote-footer">Yogi Berra,
-                                    <cite title="Source Title">The Wit and Wisdom of Yogi Berra,
-                                        P. Pepe, Diversion Books, 2014</cite>
-                                    </footer>
-                                </blockquote>
-                            </CardBody>
+                        <blockquote className="blockquote">
+                            <p className="mb-0">You better cut the pizza in four pieces because
+                                Im not hungry enough to eat six.</p><br/>
+                            <footer className="blockquote-footer">Yogi Berra,
+                            <cite title="Source Title">The Wit and Wisdom of Yogi Berra,
+                                P. Pepe, Diversion Books, 2014</cite>
+                            </footer>
+                        </blockquote>
+                    </CardBody>
                     </Card>
                 </div>
             </div>

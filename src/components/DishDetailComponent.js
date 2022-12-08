@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import CommentForm from './CommentForm';
 
 function RenderDish ({ dish }) {
   if (dish != null) {
@@ -58,6 +59,7 @@ function DishDetail (props) {
             <RenderDish dish = {props.dish}/>
             <div className="col-12 col-md-5 m-1">
               <RenderComments comments = {props.comments}/>
+              <CommentForm/>
             </div>
         </div>
       </div>
