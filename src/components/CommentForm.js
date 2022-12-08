@@ -7,10 +7,12 @@ function CommentForm () {
   const maxLength = (len) => (val) => !val || (val.length <= len);
   const minLength = (len) => (val) => !val || (val.length >= len);
   const [isModalOpen, setModalOpen] = useState(false);
-  const toggleModal = () => {
+
+  function toggleModal () {
     setModalOpen(!isModalOpen);
   };
-  const handleSubmit = (values) => {
+
+  function handleSubmit (values) {
     toggleModal();
     alert('User details: ' + JSON.stringify(values));
   };
