@@ -7,11 +7,14 @@ function CommentForm () {
   const maxLength = (len) => (val) => !val || (val.length <= len);
   const minLength = (len) => (val) => !val || (val.length >= len);
   const [isModalOpen, setModalOpen] = useState(false);
-  const toggleModal = () => {
+
+  function toggleModal () {
     setModalOpen(!isModalOpen);
   };
-  const handleSubmit = (values) => {
-    alert(JSON.stringify(values));
+
+  function handleSubmit (values) {
+    toggleModal();
+    alert('User details: ' + JSON.stringify(values));
   };
   return (
     <>
@@ -59,7 +62,7 @@ function CommentForm () {
                 </Row>
                 <Row className='form-group m-1'>
                     <Col>
-                        <Button color='primary'>Submit</Button>
+                        <Button type='submit' color='primary'>Submit</Button>
                     </Col>
                 </Row>
             </LocalForm>
