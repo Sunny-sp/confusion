@@ -1,7 +1,7 @@
 import { DISHES } from '../shared/dishes';
 
-export const Dishes = (state = DISHES, actions) => {
-  switch (actions.type) {
+export const Dishes = (state = DISHES, action) => {
+  switch (action.type) {
     default:
       return state;
   }
