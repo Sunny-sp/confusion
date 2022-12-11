@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || (val.length <= len);
 const minLength = (len) => (val) => !val || (val.length >= len);
-
 class CommentForm extends Component {
   constructor (props) {
     super(props);
@@ -25,7 +24,7 @@ class CommentForm extends Component {
 
   handleSubmit (values) {
     this.toggleModal();
-    alert('User details: ' + JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   };
 
   render () {
@@ -53,10 +52,10 @@ class CommentForm extends Component {
                 <Row className='form-group m-1'>
                     <Label className='col-sm-3'>Your Name</Label>
                     <Col md={12}>
-                        <Control.text model='.userName' placeholder='Name' className='form-control col-12'
+                        <Control.text model='.author' placeholder='Name' className='form-control col-12'
                         validators={{ required, minLength: minLength(3), maxLength: maxLength(15) }}
                         />
-                        <Errors model='.userName' show='touched' className='text-danger'
+                        <Errors model='.author' show='touched' className='text-danger'
                         messages={{
                           required: 'Required',
                           minLength: 'Must be greater than 2 characters',
@@ -103,7 +102,7 @@ function RenderDish ({ dish }) {
     return <div></div>;
   }
 }
-function RenderComments ({ comments }) {
+function RenderComments ({ comments, dishId, addComment }) {
   if (comments != null) {
     return (
         <div>
@@ -118,6 +117,7 @@ function RenderComments ({ comments }) {
               </div>
             );
           })}
+          <CommentForm dishId={dishId} addComment={addComment}/>
         </div>
     );
   } else {
@@ -140,8 +140,9 @@ function DishDetail (props) {
           </div>
             <RenderDish dish = {props.dish}/>
             <div className="col-12 col-md-5 m-1">
-              <RenderComments comments = {props.comments}/>
-              <CommentForm/>
+              <RenderComments comments = {props.comments}
+              dishId={props.dish.id}
+              addComment={props.addComment}/>
             </div>
         </div>
       </div>
