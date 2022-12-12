@@ -41,8 +41,8 @@ const DishWithId = (props) => {
   return (
     <DishDetail
     dish={props.dishes.filter((dish) => dish.id === parseInt(id, 10))[0]}
-    isLoading = {props.dishesLoading}
-    errMess = {props.dishesErrMess}
+    isLoading = {props.isLoading}
+    errMess = {props.errMess}
     comments={props.comments.filter((comment) => comment.dishId === parseInt(id, 10))}
     addComment = {props.addComment}
     />
