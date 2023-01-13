@@ -4,6 +4,7 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../redux/BaseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || (val.length <= len);
@@ -26,7 +27,7 @@ class CommentForm extends Component {
 
   handleSubmit (values) {
     this.toggleModal();
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
   };
 
   render () {
@@ -91,7 +92,7 @@ function RenderDish ({ dish }) {
   return (
     <div className="col-12 col-md-5 m-1">
       <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
@@ -100,7 +101,7 @@ function RenderDish ({ dish }) {
     </div>
   );
 }
-function RenderComments ({ comments, dishId, addComment }) {
+function RenderComments ({ comments, dishId, postComment }) {
   if (comments != null) {
     return (
         <div>
@@ -115,7 +116,7 @@ function RenderComments ({ comments, dishId, addComment }) {
               </div>
             );
           })}
-          <CommentForm dishId={dishId} addComment={addComment}/>
+          <CommentForm dishId={dishId} postComment={postComment}/>
         </div>
     );
   } else {
@@ -125,7 +126,7 @@ function RenderComments ({ comments, dishId, addComment }) {
   }
 }
 function DishDetail (props) {
-  if (props.isLoading) {
+  if (props.dishesLoading) {
     return (
         <div className="container">
             <div className="row">
@@ -133,11 +134,11 @@ function DishDetail (props) {
             </div>
         </div>
     );
-  } else if (props.errMess) {
+  } else if (props.dishesErrMess) {
     return (
         <div className="container">
             <div className="row">
-                <h4>{props.errMess}</h4>
+                <h4>{props.dishesErrMess}</h4>
             </div>
         </div>
     );
@@ -157,7 +158,7 @@ function DishDetail (props) {
             <div className="col-12 col-md-5 m-1">
               <RenderComments comments = {props.comments}
               dishId={props.dish.id}
-              addComment={props.addComment}/>
+              postComment={props.postComment}/>
             </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { Comments } from './comments';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
-import { InitialFeedback } from './Form';
+import { InitialFeedback } from './Forms';
 export const ConfigureStore = () => {
   const store = createStore(
     combineReducers({
