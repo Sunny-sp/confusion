@@ -49,8 +49,6 @@ class Header extends Component {
     this.toggleModal();
     this.props.loginUser(this.username.value, this.password.value);
     console.log('intial cred: ' + this.username.value + ' p:w ' + this.password.value);
-    // alert(`UserName: ${this.userName.value} Password: ${this.password.value}
-    // remember me: ${this.remember.checked}`);
   }
 
   handleSigup (event) {
@@ -62,8 +60,6 @@ class Header extends Component {
     if (this.props.auth.errMess) {
       alert(this.props.auth.errMess);
     }
-    // alert(`UserName: ${this.userName.value} Password: ${this.password.value}
-    // remember me: ${this.remember.checked}`);
   }
 
   handleLogout (event) {
@@ -173,7 +169,7 @@ class Header extends Component {
               </FormGroup>
               <FormGroup>
                 <Label check>
-                  <Input type='checkbox' name='remember'
+                  <Input htmlFor='remember' type='checkbox' name='remember'
                   // eslint-disable-next-line no-return-assign
                   innerRef={(input) => this.remember = input}/> Remember me!
                 </Label>
