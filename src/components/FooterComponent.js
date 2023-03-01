@@ -35,7 +35,7 @@ function Footer () {
                             <a className="btn btn-social-icon btn-google" href="https://youtube.com/"><i className="fa fa-youtube"></i></a>
                             <a className="btn btn-social-icon" href="mailto:"><i className="fa fa-envelope-o"></i></a>
                         </div>
-                </div>
+                    </div>
                 </div>
                 <div className='row justify-content-center'>
                     <div className='col-auto'>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media, Fade } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { baseUrl } from '../redux/BaseUrl';
+import { Loading } from './LoadingComponent';
 const RenderLeader = (props) => {
   return (
     <Media>
         <Media left middle>
-        <Media object src={props.leader.image} alt={props.leader.name} />
+        <Media object src={baseUrl + props.leader.image} alt={props.leader.name} />
         </Media>
-
         <Media body className='ml-5'>
             <Media heading>{props.leader.name}</Media>
             <p>{props.leader.designation}</p>
@@ -25,7 +26,20 @@ function About (props) {
         </div>
     );
   });
-  return (
+  if (props.leadersLoading) {
+    return (
+        <div className='container'>
+            <Loading/>
+        </div>
+    );
+  } else if (props.leadersErrMess) {
+    return (
+        <div className='container'>
+            <h4>{props.leadersErrMess}</h4>
+        </div>
+    );
+  } else {
+    return (
         <div className='container'>
             <div className='row'>
                 <Breadcrumb>
@@ -85,6 +99,7 @@ function About (props) {
                 </div>
             </div>
         </div>
-  );
+    );
+  }
 }
 export default About;
