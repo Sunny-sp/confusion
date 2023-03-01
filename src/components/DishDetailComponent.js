@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Control, LocalForm } from 'react-redux-form';
 import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Row, Col } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../redux/BaseUrl';
 
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !val || (val.length <= len);
-const minLength = (len) => (val) => !val || (val.length >= len);
 class CommentForm extends Component {
   constructor (props) {
     super(props);
@@ -27,7 +24,7 @@ class CommentForm extends Component {
 
   handleSubmit (values) {
     this.toggleModal();
-    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.postComment(this.props.dishId, values.rating, values.comment);
   };
 
   render () {
@@ -50,21 +47,6 @@ class CommentForm extends Component {
                             <option>4</option>
                             <option>5</option>
                         </Control.select>
-                    </Col>
-                </Row>
-                <Row className='form-group m-1'>
-                    <Label className='col-sm-3'>Your Name</Label>
-                    <Col md={12}>
-                        <Control.text model='.author' placeholder='Name' className='form-control col-12'
-                        validators={{ required, minLength: minLength(3), maxLength: maxLength(15) }}
-                        />
-                        <Errors model='.author' show='touched' className='text-danger'
-                        messages={{
-                          required: 'Required',
-                          minLength: 'Must be greater than 2 characters',
-                          maxLength: 'Must be 15 characters or less'
-                        }}
-                        />
                     </Col>
                 </Row>
                 <Row className='form-group m-1'>
@@ -102,17 +84,37 @@ function RenderDish ({ dish }) {
   );
 }
 function RenderComments ({ comments, dishId, postComment }) {
+  const toggleModal = (props) => {
+    this.setState({
+      isModalOpen: !props.isModalOpen
+    });
+  };
   if (comments != null) {
     return (
         <div>
           <h4>Comments</h4>
-          {comments.map(({ id, comment, author, date }) => {
+          <hr/>
+          {comments.map(({ id, rating, comment, author, date }) => {
             return (
-              <div key={id} >
-                <p>{comment}</p>
-                <p>
-                  --{author}, {moment(date).format('MMM DD, yyyy')}
-                </p>
+              <div key={id} className='container'>
+                <div className='row'>
+                  <span>{comment}</span>
+                  <span>
+                    --{author.firstname + ' ' + author.lastname}, {moment(date).format('MMM DD, yyyy')}
+                  </span>
+                </div>
+                  <div className='row'>
+                    <div className='col-4 col-sm-3 col-md-5 col-lg-3'>
+                      <span>Rating: {rating}</span>
+                    </div>
+                    <div className='col-3 col-sm-2 col-md-3 col-lg-2'>
+                      <span className='fa fa-edit' onClick={toggleModal}/>
+                    </div>
+                    <div className='col-3 col-sm-2 col-md-3 col-lg-2'>
+                      <span className='fa fa-trash'/>
+                    </div>
+                </div>
+                <hr/>
               </div>
             );
           })}
@@ -157,7 +159,7 @@ function DishDetail (props) {
             <RenderDish dish = {props.dish}/>
             <div className="col-12 col-md-5 m-1">
               <RenderComments comments = {props.comments}
-              dishId={props.dish.id}
+              dishId={props.dish._id}
               postComment={props.postComment}/>
             </div>
         </div>

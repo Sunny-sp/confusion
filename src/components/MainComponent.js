@@ -9,14 +9,15 @@ import AboutUs from './AboutComponent';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback } from '../redux/ActionsCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback, loginUser, logoutUser, signupUser } from '../redux/ActionsCreators';
 import { actions } from 'react-redux-form';
 const mapStateToProps = (state) => {
   return {
     dishes: state.dishes,
     comments: state.comments,
     promotions: state.promotions,
-    leaders: state.leaders
+    leaders: state.leaders,
+    auth: state.auth
   };
 };
 
@@ -27,7 +28,10 @@ const mapDispatchToProps = (dispatch) => ({
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
   fetchLeaders: () => dispatch(fetchLeaders()),
-  postFeedback: (feedback) => dispatch(postFeedback(feedback))
+  postFeedback: (feedback) => dispatch(postFeedback(feedback)),
+  loginUser: (username, password) => dispatch(loginUser(username, password)),
+  logoutUser: () => dispatch(logoutUser()),
+  signupUser: (firstname, lastname, username, password) => dispatch(signupUser(firstname, lastname, username, password))
 });
 
 const HomePage = (props) => {
@@ -47,13 +51,13 @@ const HomePage = (props) => {
 };
 
 const DishWithId = (props) => {
-  const { id } = useParams();
+  const { dishId } = useParams();
   return (
     <DishDetail
-    dish={props.dishes.filter((dish) => dish.id === parseInt(id, 10))[0]}
+    dish={props.dishes.filter((dish) => dish._id === dishId)[0]}
     dishesLoading = {props.dishesLoading}
     dishesErrMess = {props.dishesErrMess}
-    comments={props.comments.filter((comment) => comment.dishId === parseInt(id, 10))}
+    comments={props.comments.filter((comment) => comment.dishId === dishId)}
     commentsErrMess = {props.commentsErrMess}
     postComment = {props.postComment}
     />
@@ -70,7 +74,7 @@ const Main = (props) => {
   const location = useLocation();
   return (
       <div>
-        <Header />
+        <Header signupUser = {props.signupUser} loginUser = {props.loginUser} auth ={props.auth} logoutUser={props.logoutUser}/>
         <TransitionGroup>
           <CSSTransition key = {location.key} timeout = {300} classNames = 'page'>
               <Routes>
@@ -86,7 +90,7 @@ const Main = (props) => {
                     leadersLoading = {props.leaders.isLoading}
                     leadersErrMess = {props.leaders.errMess}/>} />
                 <Route exact path='/menu'element={<Menu dishes={props.dishes}/>}/>
-                <Route path='/menu/:id'
+                <Route path='/menu/:dishId'
                   element={<DishWithId
                     dishes={props.dishes.dishes}
                     dishesLoading = {props.dishes.isLoading}
@@ -94,7 +98,7 @@ const Main = (props) => {
                     comments = {props.comments.comments}
                     commentsErrMess = {props.comments.errMess}
                     postComment = {props.postComment}/>}/>
-                <Route exect path='/contactus' element={<Contact
+                <Route exact path='/contactus' element={<Contact
                   resetFeedbackForm = {props.resetFeedbackForm}
                   postFeedback = {props.postFeedback}/>}/>
                 <Route exact path='/aboutus' element={

@@ -8,19 +8,29 @@ export const addComment = (comment) => (
     payload: comment
   }
 );
-export const postComment = (dishId, rating, author, comment) => (dispatch) => {
-  console.log('dishId tyesting' + dishId);
+export const postComment = (dishId, rating, comment) => (dispatch) => {
+  console.log('dishId testing' + dishId);
+  console.log('rating testing' + rating);
+  console.log('comment testing' + comment);
   const newComment = {
     dishId,
     rating,
-    author,
     comment
   };
   newComment.date = new Date().toISOString();
-  axios.post(baseUrl + 'comments', newComment)
+  axios.post(baseUrl + 'comments', newComment,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    })
     .then(response => dispatch(addComment(response.data)))
     .catch((error) => {
-      alert('Error ' + error.request.status + ': comment could not add!');
+      if (!localStorage.getItem('token')) {
+        alert('please Login before adding a comment on a dish!');
+      } else {
+        alert('Error ' + error.request.status + ': comment could not add!');
+      }
     });
 };
 export const fetchDishes = () => (dispatch) => {
@@ -122,3 +132,95 @@ export const postFeedback = (feedback) => () => {
     })
     .catch(error => alert(error.message));
 };
+
+export const loginUser = (username, password) => (dispatch) => {
+  const cred = {
+    username,
+    password
+  };
+  console.log('cred: ' + JSON.stringify(cred));
+  dispatch(requestLogin(cred));
+  axios.post(baseUrl + 'users/login', cred)
+    .then((response) => {
+      console.log(JSON.stringify('response' + JSON.stringify(response)));
+      if (response.data.success) {
+        return response;
+      } else {
+        const err = new Error('Error: ' + response.status);
+        throw err;
+      }
+    })
+    .then((response) => {
+      if (response.statusText === 'OK') {
+        dispatch(receiveLogin(response.data.token));
+        console.log('token: ' + response.data.token);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('cred', JSON.stringify(cred));
+      } else {
+        const err = new Error('Error: ' + response.status);
+        throw err;
+      }
+    })
+    .catch((err) => dispatch(loginError(err.message)));
+};
+export const requestLogin = (cred) => ({
+  type: ActionTypes.REQUEST_LOGIN,
+  payload: cred
+});
+export const receiveLogin = (token) => ({
+  type: ActionTypes.LOGIN_SUCCESS,
+  payload: token
+});
+export const loginError = (errMess) => ({
+  type: ActionTypes.LOGIN_ERROR,
+  payload: errMess
+});
+
+export const requestLogout = () => ({
+  type: ActionTypes.REQUEST_LOGOUT
+});
+export const receiveLogout = () => ({
+  type: ActionTypes.LOGOUT_SUCCESS
+});
+export const logoutUser = () => (dispatch) => {
+  dispatch(requestLogout());
+  localStorage.removeItem('token');
+  localStorage.removeItem('cred');
+  dispatch(receiveLogout());
+};
+
+export const signupUser = (firstname, lastname, username, password) => (dispatch) => {
+  const userDetails = {
+    firstname,
+    lastname,
+    username,
+    password
+  };
+  console.log('firstname: ' + firstname);
+  console.log('userdetails : ' + JSON.stringify(userDetails));
+  dispatch(requestSignup());
+  axios.post(baseUrl + 'users/signup', userDetails)
+    .then(response => {
+      console.log('response: ' + JSON.stringify(response));
+      if (response.statusText === 'OK') {
+        dispatch(receiveSignup(userDetails));
+        alert('Signup successful!');
+      } else {
+        const err = new Error('Error: ' + response.status);
+        throw err;
+      }
+    })
+    .catch(err => dispatch(signupError(err.message)));
+};
+export const requestSignup = () => ({
+  type: ActionTypes.REQUEST_SIGNUP
+
+});
+export const receiveSignup = (userDetails) => ({
+  type: ActionTypes.SIGNUP_SUCCESS,
+  payload: userDetails
+});
+export const signupError = (errMess) => ({
+  type: ActionTypes.SIGNUP_ERROR,
+  payload: errMess
+});
