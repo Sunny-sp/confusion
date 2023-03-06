@@ -161,8 +161,8 @@ class Header extends Component {
                 innerRef={(input) => this.password = input}/>
               </FormGroup>
               <FormGroup>
-                <Label check>
-                  <Input htmlFor='remember' type='checkbox' name='remember'
+                <Label check htmlFor='remember'>
+                  <Input type='checkbox' name='remember'
                   // eslint-disable-next-line no-return-assign
                   innerRef={(input) => this.remember = input}/> Remember me!
                 </Label>

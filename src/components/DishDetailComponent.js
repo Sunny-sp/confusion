@@ -127,14 +127,13 @@ function RenderComments ({ comments, dishId, postComment, editComment, deleteCom
                     </div>
                     {
                       auth.isAuthenticated
-                        ? author.username === JSON.parse(localStorage.getItem('cred')).username
-                          ? <><div className='col-3 col-sm-2 col-md-3 col-lg-2'>
+                        ? (author.username === JSON.parse(localStorage.getItem('cred')).username
+                            ? <><div className='col-3 col-sm-2 col-md-3 col-lg-2'>
                         <Button id={_id} name='Edit Comment' className='fa fa-edit' onClick={toggleModal} />
                       </div><div className='col-3 col-sm-2 col-md-3 col-lg-2'>
                           <Button id={_id} name='Delete' className='fa fa-trash' onClick={deleteCommentFromDish} />
                         </div></>
-                          : null
-
+                            : null)
                         : null
                     }
                 </div>
