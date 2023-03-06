@@ -15,7 +15,7 @@ class Header extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSigup = this.handleSigup.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handleUserButton = this.handleUserButton.bind(this);
+    this.handleModalHeader = this.handleModalHeader.bind(this);
     this.toggleModalName = this.toggleModalName.bind(this);
   }
 
@@ -37,9 +37,8 @@ class Header extends Component {
     });
   }
 
-  handleUserButton (e) {
+  handleModalHeader (e) {
     const name = e.target.id;
-    console.log('user name: ' + name);
     this.toggleModal();
     this.toggleModalName(name);
   }
@@ -48,18 +47,12 @@ class Header extends Component {
     event.preventDefault();
     this.toggleModal();
     this.props.loginUser(this.username.value, this.password.value);
-    console.log('intial cred: ' + this.username.value + ' p:w ' + this.password.value);
   }
 
   handleSigup (event) {
     event.preventDefault();
     this.toggleModal();
-    console.log('intial cred: firstname ' + this.firstname.value + ':lastname : ' + this.lastname.value + this.username.value + ' p:w ' + this.password.value);
     this.props.signupUser(this.firstname.value, this.lastname.value, this.username.value, this.password.value);
-    console.log('intial cred: ' + this.username.value + ' p:w ' + this.password.value);
-    if (this.props.auth.errMess) {
-      alert(this.props.auth.errMess);
-    }
   }
 
   handleLogout (event) {
@@ -105,14 +98,14 @@ class Header extends Component {
                         <div className='navbar-brand text-muted'>{this.props.auth.user.username}</div>
                     </NavItem></>
                   : <><NavItem>
-                    <Button name='Login' id='Login' outline onClick={this.handleUserButton}>
-                      <span id='Login' onClick={this.handleUserButton} className='fa fa-sign-in fa-lg'></span> Login
+                    <Button name='Login' id='Login' outline onClick={this.handleModalHeader}>
+                      <span id='Login' onClick={this.handleModalHeader} className='fa fa-sign-in fa-lg'></span> Login
                       {this.props.auth.isLoading && this.state.modalName === 'Login'
                         ? <span className='fa fa-spinner fa-pulse fa-fw' />
                         : null}
                     </Button>
                   </NavItem><NavItem>
-                      <Button id='Signup' name='Signup' className='mx-3' outline onClick={this.handleUserButton}>
+                      <Button id='Signup' name='Signup' className='mx-3' outline onClick={this.handleModalHeader}>
                         <span id='Signup' className='fa fa-sign-in fa-lg'></span> Signup
                         {this.props.auth.isLoading && this.state.modalName === 'Signup'
                           ? <span className='fa fa-spinner fa-pulse fa-fw' />
@@ -168,8 +161,8 @@ class Header extends Component {
                 innerRef={(input) => this.password = input}/>
               </FormGroup>
               <FormGroup>
-                <Label check>
-                  <Input htmlFor='remember' type='checkbox' name='remember'
+                <Label check htmlFor='remember'>
+                  <Input type='checkbox' name='remember'
                   // eslint-disable-next-line no-return-assign
                   innerRef={(input) => this.remember = input}/> Remember me!
                 </Label>
