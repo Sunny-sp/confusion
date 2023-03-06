@@ -9,9 +9,6 @@ export const addComment = (comment) => (
   }
 );
 export const postComment = (dishId, rating, comment) => (dispatch) => {
-  console.log('dishId testing' + dishId);
-  console.log('rating testing' + rating);
-  console.log('comment testing' + comment);
   const newComment = {
     dishId,
     rating,
@@ -33,6 +30,48 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
       }
     });
 };
+export const editComment = (commentId, rating, comment) => (dispatch) => {
+  const commentData = {
+    rating,
+    comment
+  };
+  axios.put(baseUrl + 'comments/' + commentId, commentData,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    })
+    .then(response => {
+      dispatch(updateComment(response.data));
+      alert('Comment Updated!');
+    })
+    .catch(error => {
+      alert('Error ' + error.request.status + ': comment could not updated!');
+    });
+};
+export const deleteComment = (commentId) => (dispatch) => {
+  axios.delete(baseUrl + 'comments/' + commentId,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    })
+    .then(response => {
+      dispatch(removeComment(response.data));
+      alert('comment deleted successfully!');
+    })
+    .catch(error => {
+      alert('Error ' + error.request.status + ': comment could not delete!');
+    });
+};
+export const updateComment = (comment) => ({
+  type: ActionTypes.UPDATE_COMMENT,
+  payload: comment
+});
+export const removeComment = (comment) => ({
+  type: ActionTypes.REMOVE_COMMENT,
+  payload: comment
+});
 export const fetchDishes = () => (dispatch) => {
   axios.get(baseUrl + 'dishes')
     .then(response => dispatch(addDishes(response.data)))
@@ -144,24 +183,15 @@ export const loginUser = (username, password) => (dispatch) => {
     .then((response) => {
       console.log(JSON.stringify('response' + JSON.stringify(response)));
       if (response.data.success) {
-        return response;
-      } else {
-        const err = new Error('Error: ' + response.status);
-        throw err;
-      }
-    })
-    .then((response) => {
-      if (response.statusText === 'OK') {
         dispatch(receiveLogin(response.data.token));
-        console.log('token: ' + response.data.token);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('cred', JSON.stringify(cred));
-      } else {
-        const err = new Error('Error: ' + response.status);
-        throw err;
       }
     })
-    .catch((err) => dispatch(loginError(err.message)));
+    .catch((error) => {
+      dispatch(loginError(error.response.data.err));
+      alert(error.response.data.err);
+    });
 };
 export const requestLogin = (cred) => ({
   type: ActionTypes.REQUEST_LOGIN,
@@ -205,16 +235,15 @@ export const signupUser = (firstname, lastname, username, password) => (dispatch
       if (response.statusText === 'OK') {
         dispatch(receiveSignup(userDetails));
         alert('Signup successful!');
-      } else {
-        const err = new Error('Error: ' + response.status);
-        throw err;
       }
     })
-    .catch(err => dispatch(signupError(err.message)));
+    .catch(err => {
+      dispatch(signupError(err.message));
+      alert(err.response.data.err.message);
+    });
 };
 export const requestSignup = () => ({
   type: ActionTypes.REQUEST_SIGNUP
-
 });
 export const receiveSignup = (userDetails) => ({
   type: ActionTypes.SIGNUP_SUCCESS,

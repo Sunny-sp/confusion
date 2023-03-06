@@ -9,7 +9,7 @@ import AboutUs from './AboutComponent';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback, loginUser, logoutUser, signupUser } from '../redux/ActionsCreators';
+import { postComment, editComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback, loginUser, logoutUser, signupUser, deleteComment } from '../redux/ActionsCreators';
 import { actions } from 'react-redux-form';
 const mapStateToProps = (state) => {
   return {
@@ -23,6 +23,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
+  editComment: (commentId, rating, comment) => dispatch(editComment(commentId, rating, comment)),
+  deleteComment: (commentId) => dispatch(deleteComment(commentId)),
   fetchDishes: () => dispatch(fetchDishes()),
   resetFeedbackForm: () => dispatch(actions.reset('feedback')),
   fetchComments: () => dispatch(fetchComments()),
@@ -59,7 +61,10 @@ const DishWithId = (props) => {
     dishesErrMess = {props.dishesErrMess}
     comments={props.comments.filter((comment) => comment.dishId === dishId)}
     commentsErrMess = {props.commentsErrMess}
+    editComment={props.editComment}
     postComment = {props.postComment}
+    deleteComment={props.deleteComment}
+    auth={props.auth}
     />
   );
 };
@@ -97,7 +102,10 @@ const Main = (props) => {
                     dishesErrMess = {props.dishes.errMess}
                     comments = {props.comments.comments}
                     commentsErrMess = {props.comments.errMess}
-                    postComment = {props.postComment}/>}/>
+                    editComment={props.editComment}
+                    postComment = {props.postComment}
+                    deleteComment={props.deleteComment}
+                    auth={props.auth}/>}/>
                 <Route exact path='/contactus' element={<Contact
                   resetFeedbackForm = {props.resetFeedbackForm}
                   postFeedback = {props.postFeedback}/>}/>

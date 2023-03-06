@@ -10,9 +10,9 @@ const InitialAuth = {
 export const Auth = (state = InitialAuth, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_LOGIN:
-      return { ...state, isLoading: true, isAuthenticated: false, user: action.payload };
+      return { ...state, isLoading: true, isAuthenticated: false, user: action.payload, errMess: '' };
     case ActionTypes.LOGIN_SUCCESS:
-      return { ...state, isLoading: false, isAuthenticated: true, token: action.payload };
+      return { ...state, isLoading: false, isAuthenticated: true, token: action.payload, errMess: '' };
     case ActionTypes.LOGIN_ERROR:
       return { ...state, isLoading: false, isAuthenticated: false, errMess: action.payload };
     case ActionTypes.REQUEST_LOGOUT:
@@ -22,7 +22,7 @@ export const Auth = (state = InitialAuth, action) => {
     case ActionTypes.LOGOUT_ERROR:
       return { ...state, isLoading: false, isAuthenticated: false, errMess: action.payload };
     case ActionTypes.REQUEST_SIGNUP:
-      return { ...state, isLoading: true, isAuthenticated: false, user: action.payload };
+      return { ...state, isLoading: true, isAuthenticated: false, user: action.payload, errMess: '' };
     case ActionTypes.SIGNUP_SUCCESS:
       return { ...state, isLoading: false, isAuthenticated: false, token: '', user: null, errMess: '' };
     case ActionTypes.SIGNUP_ERROR:
