@@ -79,6 +79,13 @@ class Header extends Component {
                 <NavItem>
                   <Link className="nav-link" to='/menu'><span className="fa fa-list fa-lg"></span> Menu</Link>
                 </NavItem>
+                {
+                  this.props.auth.isAuthenticated
+                    ? <NavItem>
+                  <Link className="nav-link" to='/favorite'><span className="fa fa-heart fa-lg"></span> Favorite</Link>
+                </NavItem>
+                    : null
+                }
                 <NavItem>
                   <Link className="nav-link" to='/contactus'><span className="fa fa-address-card fa-lg"></span> Contact Us</Link>
                 </NavItem>
@@ -98,13 +105,14 @@ class Header extends Component {
                         <div className='navbar-brand text-muted'>{this.props.auth.user.username}</div>
                     </NavItem></>
                   : <><NavItem>
-                    <Button name='Login' id='Login' outline onClick={this.handleModalHeader}>
-                      <span id='Login' onClick={this.handleModalHeader} className='fa fa-sign-in fa-lg'></span> Login
-                      {this.props.auth.isLoading && this.state.modalName === 'Login'
-                        ? <span className='fa fa-spinner fa-pulse fa-fw' />
-                        : null}
-                    </Button>
-                  </NavItem><NavItem>
+                        <Button name='Login' id='Login' outline onClick={this.handleModalHeader}>
+                          <span id='Login' onClick={this.handleModalHeader} className='fa fa-sign-in fa-lg'></span> Login
+                          {this.props.auth.isLoading && this.state.modalName === 'Login'
+                            ? <span className='fa fa-spinner fa-pulse fa-fw' />
+                            : null}
+                        </Button>
+                      </NavItem>
+                      <NavItem>
                       <Button id='Signup' name='Signup' className='mx-3' outline onClick={this.handleModalHeader}>
                         <span id='Signup' className='fa fa-sign-in fa-lg'></span> Signup
                         {this.props.auth.isLoading && this.state.modalName === 'Signup'
