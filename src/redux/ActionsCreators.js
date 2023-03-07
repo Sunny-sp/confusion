@@ -134,16 +134,13 @@ export const fetchPromos = () => (dispatch) => {
     })
     .catch((error) => dispatch(promosFailed(error.message)));
 };
-
 export const leadersLoading = () => ({
   type: ActionTypes.LEADERS_LOADING
 });
-
 export const leadersFailed = (errMess) => ({
   type: ActionTypes.LEADERS_FAILED,
   payload: errMess
 });
-
 export const addLeaders = (leaders) => ({
   type: ActionTypes.ADD_LEADERS,
   payload: leaders
@@ -158,7 +155,6 @@ export const fetchLeaders = () => (dispatch) => {
     })
     .catch((error) => dispatch(leadersFailed(error.message)));
 };
-
 export const postFeedback = (feedback) => () => {
   const newFeedback = { ...feedback };
   newFeedback.date = new Date().toISOString();
@@ -171,7 +167,6 @@ export const postFeedback = (feedback) => () => {
     })
     .catch(error => alert(error.message));
 };
-
 export const loginUser = (username, password) => (dispatch) => {
   const cred = {
     username,
@@ -205,7 +200,6 @@ export const loginError = (errMess) => ({
   type: ActionTypes.LOGIN_ERROR,
   payload: errMess
 });
-
 export const requestLogout = () => ({
   type: ActionTypes.REQUEST_LOGOUT
 });
@@ -218,7 +212,6 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('cred');
   dispatch(receiveLogout());
 };
-
 export const signupUser = (firstname, lastname, username, password) => (dispatch) => {
   const userDetails = {
     firstname,
@@ -253,3 +246,63 @@ export const signupError = (errMess) => ({
   type: ActionTypes.SIGNUP_ERROR,
   payload: errMess
 });
+export const fetchFavorite = () => (dispatch) => {
+  dispatch(favoriteLoading());
+  axios.get(baseUrl + 'favorites',
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    })
+    .then(response => {
+      if (response.data !== null) {
+        dispatch(addFavorite(response.data.dishes));
+      }
+    })
+    .catch((err) => {
+      dispatch(favoriteError(err.message));
+      alert(err.message);
+    });
+};
+export const addFavorite = (dishes) => ({
+  type: ActionTypes.ADD_FAVORITE,
+  payload: dishes
+});
+export const favoriteLoading = () => ({
+  type: ActionTypes.FAVORITE_LOADING
+});
+export const favoriteError = (errMess) => ({
+  type: ActionTypes.FAVORITE_ERROR,
+  payload: errMess
+});
+export const deleteFavorite = (dishId) => (dispatch) => {
+  axios.delete(baseUrl + 'favorites/' + dishId, {
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token')
+    }
+  })
+    .then(response => {
+      dispatch(removeFavorite(response.data.dishes));
+    })
+    .catch(err => alert(err.message));
+};
+export const removeFavorite = (dishes) => ({
+  type: ActionTypes.REMOVE_FAVORITE,
+  payload: dishes
+});
+export const postFavorite = (dishId) => (dispatch) => {
+  const dishes = [{
+    _id: dishId
+  }];
+  axios.post(baseUrl + 'favorites', dishes,
+    {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    })
+    .then(response => {
+      dispatch(addFavorite(response.data.dishes));
+      alert('Added into favorite list!');
+    })
+    .catch(err => dispatch(favoriteError(err.message)));
+};

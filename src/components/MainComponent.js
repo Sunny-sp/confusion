@@ -6,10 +6,14 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishDetailComponent';
 import AboutUs from './AboutComponent';
+import Favorite from './FavoriteComponent';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, editComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback, loginUser, logoutUser, signupUser, deleteComment } from '../redux/ActionsCreators';
+import {
+  postComment, editComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback,
+  loginUser, logoutUser, signupUser, deleteComment, fetchFavorite, deleteFavorite, postFavorite
+} from '../redux/ActionsCreators';
 import { actions } from 'react-redux-form';
 const mapStateToProps = (state) => {
   return {
@@ -17,7 +21,8 @@ const mapStateToProps = (state) => {
     comments: state.comments,
     promotions: state.promotions,
     leaders: state.leaders,
-    auth: state.auth
+    auth: state.auth,
+    favorite: state.favorite
   };
 };
 
@@ -33,7 +38,10 @@ const mapDispatchToProps = (dispatch) => ({
   postFeedback: (feedback) => dispatch(postFeedback(feedback)),
   loginUser: (username, password) => dispatch(loginUser(username, password)),
   logoutUser: () => dispatch(logoutUser()),
-  signupUser: (firstname, lastname, username, password) => dispatch(signupUser(firstname, lastname, username, password))
+  signupUser: (firstname, lastname, username, password) => dispatch(signupUser(firstname, lastname, username, password)),
+  fetchFavorite: () => dispatch(fetchFavorite()),
+  deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId)),
+  postFavorite: (dishId) => dispatch(postFavorite(dishId))
 });
 
 const HomePage = (props) => {
@@ -65,6 +73,8 @@ const DishWithId = (props) => {
     postComment = {props.postComment}
     deleteComment={props.deleteComment}
     auth={props.auth}
+    isFavorite={props.favorite.dishes.filter(favoriteDish => favoriteDish._id === dishId).length > 0}
+    postFavorite={props.postFavorite}
     />
   );
 };
@@ -79,7 +89,8 @@ const Main = (props) => {
   const location = useLocation();
   return (
       <div>
-        <Header signupUser = {props.signupUser} loginUser = {props.loginUser} auth ={props.auth} logoutUser={props.logoutUser}/>
+        <Header signupUser = {props.signupUser} loginUser = {props.loginUser} auth ={props.auth} logoutUser={props.logoutUser}
+          />
         <TransitionGroup>
           <CSSTransition key = {location.key} timeout = {300} classNames = 'page'>
               <Routes>
@@ -105,7 +116,9 @@ const Main = (props) => {
                     editComment={props.editComment}
                     postComment = {props.postComment}
                     deleteComment={props.deleteComment}
-                    auth={props.auth}/>}/>
+                    auth={props.auth}
+                    favorite={props.favorite}
+                    postFavorite={props.postFavorite}/>}/>
                 <Route exact path='/contactus' element={<Contact
                   resetFeedbackForm = {props.resetFeedbackForm}
                   postFeedback = {props.postFeedback}/>}/>
@@ -114,6 +127,10 @@ const Main = (props) => {
                   leadersLoading = {props.leaders.isLoading}
                   leadersErrMess = {props.leaders.errMess}/>} />
                 <Route path='*' element={<Navigate to='/home'/>}/>
+                <Route exact path='/favorite'
+                  element={<Favorite favorite={props.favorite} fetchFavorite={props.fetchFavorite} auth={props.auth}
+                    deleteFavorite={props.deleteFavorite}/>}>
+                </Route>
               </Routes>
             </CSSTransition>
           </TransitionGroup>

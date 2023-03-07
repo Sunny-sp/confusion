@@ -8,6 +8,7 @@ import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
 import { InitialFeedback } from './Forms';
 import { Auth } from './auth';
+import Favorite from './favorite';
 
 export const ConfigureStore = () => {
   const store = createStore(
@@ -17,6 +18,7 @@ export const ConfigureStore = () => {
       promotions: Promotions,
       comments: Comments,
       auth: Auth,
+      favorite: Favorite,
       ...createForms({
         feedback: InitialFeedback
       })

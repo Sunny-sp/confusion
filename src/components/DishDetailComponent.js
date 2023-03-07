@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Control, LocalForm } from 'react-redux-form';
-import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Row, Col } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Row, Col, CardImgOverlay } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
@@ -50,7 +50,8 @@ function CommentForm (props) {
               <Row className='form-group m-1'>
                   <Label className='col-3'>Rating</Label>
                   <Col md={12}>
-                      <Control.select model='.rating' id='rating' className='col-12'>
+                      <Control.select model='.rating' id='rating' className='col-12' defaultValue={1}>
+                          <option disabled>please select--</option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -79,12 +80,31 @@ function CommentForm (props) {
   );
 }
 
-function RenderDish ({ dish }) {
+function RenderDish ({ dish, isFavorite, postFavorite, auth }) {
+  const toggleFavorite = () => {
+    if (!isFavorite) {
+      postFavorite(dish._id);
+    }
+  };
+
   return (
     <div className="col-12 col-md-5 m-1">
       <Card>
         <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
+          <CardImgOverlay>
+            {
+              auth.isAuthenticated
+                ? <Button onClick={toggleFavorite}>
+              {
+                isFavorite
+                  ? <span className='fa fa-heart' style={{ color: 'red' }}/>
+                  : <span className='fa fa-heart-o'/>
+              }
+            </Button>
+                : null
+            }
+          </CardImgOverlay>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
         </CardBody>
@@ -180,7 +200,8 @@ function DishDetail (props) {
             <h3>{props.dish.name}</h3>
             <hr/>
           </div>
-            <RenderDish dish = {props.dish}/>
+            <RenderDish dish = {props.dish} isFavorite={props.isFavorite} postFavorite={props.postFavorite}
+              auth={props.auth}/>
             <div className="col-12 col-md-5 m-1">
               <RenderComments comments = {props.comments}
               dishId={props.dish._id}
