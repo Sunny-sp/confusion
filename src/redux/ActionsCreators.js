@@ -260,7 +260,7 @@ export const fetchFavorite = () => (dispatch) => {
       }
     })
     .catch((err) => {
-      dispatch(favoriteError());
+      dispatch(favoriteError(err.message));
       alert(err.message);
     });
 };
@@ -271,8 +271,9 @@ export const addFavorite = (dishes) => ({
 export const favoriteLoading = () => ({
   type: ActionTypes.FAVORITE_LOADING
 });
-export const favoriteError = () => ({
-  type: ActionTypes.FAVORITE_ERROR
+export const favoriteError = (errMess) => ({
+  type: ActionTypes.FAVORITE_ERROR,
+  payload: errMess
 });
 export const deleteFavorite = (dishId) => (dispatch) => {
   axios.delete(baseUrl + 'favorites/' + dishId, {
