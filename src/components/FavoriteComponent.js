@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from 'reactstrap';
 import { baseUrl } from '../redux/BaseUrl';
 
@@ -7,12 +7,6 @@ const Favorite = (props) => {
     console.log('dishid to remove: ' + e.target.id);
     props.deleteFavorite(e.target.id);
   };
-
-  useEffect(() => {
-    if (props.auth.isAuthenticated) {
-      props.fetchFavorite();
-    }
-  }, [props.auth.isAuthenticated]);
   return (
     props.auth.isAuthenticated
       ? <div className='container'>
