@@ -85,6 +85,9 @@ const Main = (props) => {
     props.fetchComments();
     props.fetchPromos();
     props.fetchLeaders();
+    if (props.auth.isAuthenticated) {
+      props.fetchFavorite();
+    }
   }, []);
   const location = useLocation();
   return (
@@ -128,7 +131,7 @@ const Main = (props) => {
                   leadersErrMess = {props.leaders.errMess}/>} />
                 <Route path='*' element={<Navigate to='/home'/>}/>
                 <Route exact path='/favorite'
-                  element={<Favorite favorite={props.favorite} fetchFavorite={props.fetchFavorite} auth={props.auth}
+                  element={<Favorite favorite={props.favorite} auth={props.auth}
                     deleteFavorite={props.deleteFavorite}/>}>
                 </Route>
               </Routes>

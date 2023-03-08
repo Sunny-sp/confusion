@@ -183,6 +183,9 @@ export const loginUser = (username, password) => (dispatch) => {
         localStorage.setItem('cred', JSON.stringify(cred));
       }
     })
+    .then(() => {
+      dispatch(fetchFavorite());
+    })
     .catch((error) => {
       dispatch(loginError(error.response.data.err));
       alert(error.response.data.err);
