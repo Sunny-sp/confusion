@@ -28,7 +28,7 @@ const Menu = (props) => {
     return (
       <div className='container'>
         <div className='row'>
-          <Loading/>
+          <Loading isLoading={props.dishes.isLoading}/>
         </div>
     </div>
     );

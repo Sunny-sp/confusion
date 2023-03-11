@@ -5,6 +5,10 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../redux/BaseUrl';
+import LoadingOverlay from 'react-loading-overlay';
+import { BeatLoader } from 'react-spinners';
+
+// BarLoader, BeatLoader, BounceLoader, CircleLoader, ClimbingBoxLoader, ClipLoader, ClockLoader, DotLoader, FadeLoader, GridLoader, HashLoader, MoonLoader, PacmanLoader, PropagateLoader, PuffLoader, PulseLoader, RingLoader, RiseLoader, RotateLoader, ScaleLoader, SkewLoader, SquareLoader, SyncLoader)
 
 function CommentForm (props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,8 +32,6 @@ function CommentForm (props) {
 
   const handleSubmit = (values) => {
     if (props.isModalOpen) {
-      console.log(props.commentId, values.rating, values.comment);
-      console.log(props.commentId.substring(0, 2));
       props.editComment(props.commentId, values.rating, values.comment);
     }
     toggleModal();
@@ -40,42 +42,42 @@ function CommentForm (props) {
 
   return (
   <React.Fragment>
-  <Button name='Submit Comment' outline onClick={toggleModal}>
-      <span name='Submit Comment' className='fa fa-pencil'/> Submit Comment
-  </Button>
-  <Modal isOpen={isModalOpen} toggle={toggleModal}>
-      <ModalHeader toggle={toggleModal}>{modalName}</ModalHeader>
-      <ModalBody>
-          <LocalForm onSubmit={handleSubmit}>
-              <Row className='form-group m-1'>
-                  <Label className='col-3'>Rating</Label>
-                  <Col md={12}>
-                      <Control.select model='.rating' id='rating' className='col-12' defaultValue={1}>
-                          <option disabled>please select--</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                      </Control.select>
-                  </Col>
-              </Row>
-              <Row className='form-group m-1'>
-                  <Label className='col-3'>Comment</Label>
-                  <Col md={12}>
-                      <Control.textarea
-                      model='.comment' id='.comment' placeholder='write here comments...' className='col-12'
-                      />
-                  </Col>
-              </Row>
-              <Row className='form-group m-1'>
-                  <Col>
-                      <Button type='submit' color='primary'>Submit</Button>
-                  </Col>
-              </Row>
-          </LocalForm>
-      </ModalBody>
-  </Modal>
+    <Button name='Submit Comment' outline onClick={toggleModal}>
+        <span name='Submit Comment' className='fa fa-pencil'/> Submit Comment
+    </Button>
+    <Modal isOpen={isModalOpen} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>{modalName}</ModalHeader>
+        <ModalBody>
+            <LocalForm onSubmit={handleSubmit}>
+                <Row className='form-group m-1'>
+                    <Label className='col-3'>Rating</Label>
+                    <Col md={12}>
+                        <Control.select model='.rating' id='rating' className='col-12' defaultValue={1}>
+                            <option disabled>please select--</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </Control.select>
+                    </Col>
+                </Row>
+                <Row className='form-group m-1'>
+                    <Label className='col-3'>Comment</Label>
+                    <Col md={12}>
+                        <Control.textarea
+                        model='.comment' id='.comment' placeholder='write here comments...' className='col-12'
+                        />
+                    </Col>
+                </Row>
+                <Row className='form-group m-1'>
+                    <Col>
+                        <Button type='submit' color='primary'>Submit</Button>
+                    </Col>
+                </Row>
+            </LocalForm>
+        </ModalBody>
+    </Modal>
   </React.Fragment>
   );
 }
@@ -172,11 +174,16 @@ function RenderComments ({ comments, dishId, postComment, editComment, deleteCom
   }
 }
 function DishDetail (props) {
+  const [isLoading, setIsLoading] = useState();
+  useEffect(() => {
+    setIsLoading(props.isCommentLoading || props.favorite.isLoading);
+  }, [props.isCommentLoading, props.favorite.isLoading]);
+
   if (props.dishesLoading) {
     return (
         <div className="container">
             <div className="row">
-                <Loading />
+              <Loading/>
             </div>
         </div>
     );
@@ -190,6 +197,8 @@ function DishDetail (props) {
     );
   } else if (props.dish != null) {
     return (
+      <>
+      <LoadingOverlay active = {isLoading} spinner={<BeatLoader/>}/>
       <div className="container">
         <div className="row">
           <Breadcrumb>
@@ -212,6 +221,7 @@ function DishDetail (props) {
             </div>
         </div>
       </div>
+      </>
     );
   } else {
     return <div></div>;

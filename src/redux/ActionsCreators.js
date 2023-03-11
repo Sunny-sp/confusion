@@ -2,6 +2,33 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from './BaseUrl';
 import axios from 'axios';
 
+export const commentsLoading = () => (
+  {
+    type: ActionTypes.COMMENTS_LOADING
+  }
+);
+export const commentsFailed = (errMess) => (
+  {
+    type: ActionTypes.COMMENTS_FAILED,
+    payload: errMess
+  }
+);
+export const fetchComments = () => (dispatch) => {
+  axios.get(baseUrl + 'comments')
+    .then(response => dispatch(getComments(response.data)))
+    .catch((error) => {
+      if (error.response) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error('Error 404: Not Found!');
+      }
+    })
+    .catch((error) => dispatch(commentsFailed(error.message)));
+};
+export const getComments = (comments) => ({
+  type: ActionTypes.GET_COMMENTS,
+  payload: comments
+});
 export const addComment = (comment) => (
   {
     type: ActionTypes.ADD_COMMENT,
@@ -15,6 +42,7 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
     comment
   };
   newComment.date = new Date().toISOString();
+  dispatch(commentsLoading());
   axios.post(baseUrl + 'comments', newComment,
     {
       headers: {
@@ -23,6 +51,7 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
     })
     .then(response => dispatch(addComment(response.data)))
     .catch((error) => {
+      dispatch(commentsFailed('comment could not add!'));
       if (!localStorage.getItem('token')) {
         alert('please Login before adding a comment on a dish!');
       } else {
@@ -30,11 +59,16 @@ export const postComment = (dishId, rating, comment) => (dispatch) => {
       }
     });
 };
+export const updateComment = (comment) => ({
+  type: ActionTypes.UPDATE_COMMENT,
+  payload: comment
+});
 export const editComment = (commentId, rating, comment) => (dispatch) => {
   const commentData = {
     rating,
     comment
   };
+  dispatch(commentsLoading());
   axios.put(baseUrl + 'comments/' + commentId, commentData,
     {
       headers: {
@@ -47,9 +81,15 @@ export const editComment = (commentId, rating, comment) => (dispatch) => {
     })
     .catch(error => {
       alert('Error ' + error.request.status + ': comment could not updated!');
+      dispatch(commentsFailed('comment could not updated!'));
     });
 };
+export const removeComment = (comment) => ({
+  type: ActionTypes.REMOVE_COMMENT,
+  payload: comment
+});
 export const deleteComment = (commentId) => (dispatch) => {
+  dispatch(commentsLoading());
   axios.delete(baseUrl + 'comments/' + commentId,
     {
       headers: {
@@ -62,16 +102,9 @@ export const deleteComment = (commentId) => (dispatch) => {
     })
     .catch(error => {
       alert('Error ' + error.request.status + ': comment could not delete!');
+      dispatch(commentsFailed('comment could not delete!'));
     });
 };
-export const updateComment = (comment) => ({
-  type: ActionTypes.UPDATE_COMMENT,
-  payload: comment
-});
-export const removeComment = (comment) => ({
-  type: ActionTypes.REMOVE_COMMENT,
-  payload: comment
-});
 export const fetchDishes = () => (dispatch) => {
   axios.get(baseUrl + 'dishes')
     .then(response => dispatch(addDishes(response.data)))
@@ -92,26 +125,6 @@ export const dishesFailed = (errMess) => ({
 export const addDishes = (dishes) => ({
   type: ActionTypes.ADD_DISHES,
   payload: dishes
-});
-export const fetchComments = () => (dispatch) => {
-  axios.get(baseUrl + 'comments')
-    .then(response => dispatch(addComments(response.data)))
-    .catch((error) => {
-      if (error.response) {
-        throw new Error(error.response);
-      } else if (error.request) {
-        throw new Error('Error 404: Not Found!');
-      }
-    })
-    .catch((error) => dispatch(commentsFailed(error.message)));
-};
-export const commentsFailed = (errMess) => ({
-  type: ActionTypes.COMMENTS_FAILED,
-  payload: errMess
-});
-export const addComments = (comments) => ({
-  type: ActionTypes.ADD_COMMENTS,
-  payload: comments
 });
 export const promosLoading = () => ({
   type: ActionTypes.PROMOS_LOADING
@@ -215,20 +228,18 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('cred');
   dispatch(receiveLogout());
 };
-export const signupUser = (firstname, lastname, username, password) => (dispatch) => {
+export const signupUser = (firstname, lastname, username, password) => async (dispatch) => {
   const userDetails = {
     firstname,
     lastname,
     username,
     password
   };
-  console.log('firstname: ' + firstname);
-  console.log('userdetails : ' + JSON.stringify(userDetails));
-  dispatch(requestSignup());
+  await dispatch(requestSignup());
   axios.post(baseUrl + 'users/signup', userDetails)
     .then(response => {
-      console.log('response: ' + JSON.stringify(response));
-      if (response.statusText === 'OK') {
+      // console.log('response: ' + JSON.stringify(response));
+      if (response.data.success === true) {
         dispatch(receiveSignup(userDetails));
         alert('Signup successful!');
       }
@@ -279,6 +290,7 @@ export const favoriteError = (errMess) => ({
   payload: errMess
 });
 export const deleteFavorite = (dishId) => (dispatch) => {
+  dispatch(favoriteLoading());
   axios.delete(baseUrl + 'favorites/' + dishId, {
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -287,7 +299,10 @@ export const deleteFavorite = (dishId) => (dispatch) => {
     .then(response => {
       dispatch(removeFavorite(response.data.dishes));
     })
-    .catch(err => alert(err.message));
+    .catch(err => {
+      dispatch(favoriteError());
+      alert(err.message);
+    });
 };
 export const removeFavorite = (dishes) => ({
   type: ActionTypes.REMOVE_FAVORITE,
@@ -297,6 +312,7 @@ export const postFavorite = (dishId) => (dispatch) => {
   const dishes = [{
     _id: dishId
   }];
+  dispatch(favoriteLoading());
   axios.post(baseUrl + 'favorites', dishes,
     {
       headers: {
@@ -307,5 +323,7 @@ export const postFavorite = (dishId) => (dispatch) => {
       dispatch(addFavorite(response.data.dishes));
       alert('Added into favorite list!');
     })
-    .catch(err => dispatch(favoriteError(err.message)));
+    .catch(err => {
+      dispatch(favoriteError(err.message));
+    });
 };
