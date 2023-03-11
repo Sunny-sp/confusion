@@ -69,12 +69,14 @@ const DishWithId = (props) => {
     dishesErrMess = {props.dishesErrMess}
     comments={props.comments.filter((comment) => comment.dishId === dishId)}
     commentsErrMess = {props.commentsErrMess}
+    isCommentLoading = {props.isCommentLoading}
     editComment={props.editComment}
     postComment = {props.postComment}
     deleteComment={props.deleteComment}
     auth={props.auth}
     isFavorite={props.favorite.dishes.filter(favoriteDish => favoriteDish._id === dishId).length > 0}
     postFavorite={props.postFavorite}
+    favorite={props.favorite}
     />
   );
 };
@@ -116,6 +118,7 @@ const Main = (props) => {
                     dishesErrMess = {props.dishes.errMess}
                     comments = {props.comments.comments}
                     commentsErrMess = {props.comments.errMess}
+                    isCommentLoading = {props.comments.isCommentLoading}
                     editComment={props.editComment}
                     postComment = {props.postComment}
                     deleteComment={props.deleteComment}
