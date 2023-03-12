@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
-import { Button, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Button, Breadcrumb, BreadcrumbItem, CardImg } from 'reactstrap';
 import { baseUrl } from '../redux/BaseUrl';
 import { BeatLoader } from 'react-spinners';
 const Favorite = (props) => {
@@ -33,7 +33,7 @@ const Favorite = (props) => {
                     return (
                       <div key={dish._id} className='row'>
                           <div className='col-xl-3 col-lg-6 col-md-4 col-sm-4 my-2'>
-                              <img src={baseUrl + dish.image} alt={dish.name}/>
+                              <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}/>
                           </div>
                           <div className='col-xl-8 col-lg-6 col-md-8 col-sm-8 my-2'>
                               <h2>{dish.name}</h2>
