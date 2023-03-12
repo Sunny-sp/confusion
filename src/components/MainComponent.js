@@ -97,7 +97,7 @@ const Main = (props) => {
         <Header signupUser = {props.signupUser} loginUser = {props.loginUser} auth ={props.auth} logoutUser={props.logoutUser}
           />
         <TransitionGroup>
-          <CSSTransition key = {location.key} timeout = {300} classNames = 'page'>
+          <CSSTransition key = {location.key} timeout = {100} classNames = 'page'>
               <Routes>
                 <Route exact path='/home'
                   element={<HomePage
