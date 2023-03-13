@@ -172,7 +172,7 @@ export const postFeedback = (feedback) => () => {
   const newFeedback = { ...feedback };
   newFeedback.date = new Date().toISOString();
   axios.post(baseUrl + 'feedback', newFeedback)
-    .then(response => alert('Thank you for giving a feedback!' + JSON.stringify(response.data, null, 2)))
+    .then(response => alert(response.data.status))
     .catch(error => {
       if (error) {
         throw new Error('couldn\'t summit your feedback!');
