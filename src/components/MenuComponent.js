@@ -19,7 +19,7 @@ function RenderMenuItem ({ dish }) {
 const Menu = (props) => {
   const menu = props.dishes.dishes.map((dish) => {
     return (
-      <div key={dish._id} className="col-12 col-md-5 m-1">
+      <div key={dish._id} className="col-12 col-sm-5 col-md-4 col-lg-4">
         <RenderMenuItem dish={dish}/>
       </div>
     );
