@@ -22,7 +22,8 @@ const mapStateToProps = (state) => {
     promotions: state.promotions,
     leaders: state.leaders,
     auth: state.auth,
-    favorite: state.favorite
+    favorite: state.favorite,
+    userFeedback: state.userFeedback
   };
 };
 
@@ -127,7 +128,8 @@ const Main = (props) => {
                     postFavorite={props.postFavorite}/>}/>
                 <Route exact path='/contactus' element={<Contact
                   resetFeedbackForm = {props.resetFeedbackForm}
-                  postFeedback = {props.postFeedback}/>}/>
+                  postFeedback = {props.postFeedback}
+                  userFeedback={props.userFeedback}/>}/>
                 <Route exact path='/aboutus' element={
                   <AboutUs leaders={props.leaders.leaders}
                   leadersLoading = {props.leaders.isLoading}

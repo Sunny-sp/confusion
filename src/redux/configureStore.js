@@ -6,7 +6,7 @@ import { Comments } from './comments';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { createForms } from 'react-redux-form';
-import { InitialFeedback } from './Forms';
+import { InitialFeedback, UserFeedback } from './Forms';
 import { Auth } from './auth';
 import Favorite from './favorite';
 
@@ -19,6 +19,7 @@ export const ConfigureStore = () => {
       comments: Comments,
       auth: Auth,
       favorite: Favorite,
+      userFeedback: UserFeedback,
       ...createForms({
         feedback: InitialFeedback
       })

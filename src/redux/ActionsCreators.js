@@ -168,18 +168,35 @@ export const fetchLeaders = () => (dispatch) => {
     })
     .catch((error) => dispatch(leadersFailed(error.message)));
 };
-export const postFeedback = (feedback) => () => {
+export const postFeedback = (feedback) => (dispatch) => {
   const newFeedback = { ...feedback };
   newFeedback.date = new Date().toISOString();
+  dispatch(feedbackLoading());
   axios.post(baseUrl + 'feedback', newFeedback)
-    .then(response => alert(response.data.status))
+    .then(response => {
+      alert(response.data.status);
+      dispatch(sendFeedback());
+    })
     .catch(error => {
       if (error) {
         throw new Error('couldn\'t summit your feedback!');
       }
     })
-    .catch(error => alert(error.message));
+    .catch(error => {
+      dispatch(feedbackError(error.message));
+      alert(error.message);
+    });
 };
+export const feedbackLoading = () => ({
+  type: ActionTypes.FEEDBACK_LOADING
+});
+export const sendFeedback = () => ({
+  type: ActionTypes.SEND_FEEDBACK
+});
+export const feedbackError = (errMess) => ({
+  type: ActionTypes.FEEDBACK_ERROR,
+  payload: errMess
+});
 export const loginUser = (username, password) => (dispatch) => {
   const cred = {
     username,
