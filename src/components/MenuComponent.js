@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbItem, Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
@@ -11,6 +11,9 @@ function RenderMenuItem ({ dish }) {
         <CardImgOverlay >
           <CardTitle className='text-info position-absolute top-0 start-0'>{dish.name}</CardTitle>
         </CardImgOverlay>
+        <CardBody style={ { background: 'rgb(230,230,250)' } }>
+          <CardTitle style={{ fontSize: 20 }}>{dish.name}</CardTitle>
+        </CardBody>
       </Link>
   </Card>
   );

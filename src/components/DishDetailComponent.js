@@ -93,7 +93,7 @@ function RenderDish ({ dish, isFavorite, postFavorite, auth }) {
     <div className="col-12 col-md-5 m-1">
       <Card>
         <CardImg top src={baseUrl + dish.image} alt={dish.name} />
-        <CardBody>
+        <CardBody style={{ background: 'rgb(230,230,250)' }}>
           <CardImgOverlay>
             {
               auth.isAuthenticated
@@ -107,8 +107,8 @@ function RenderDish ({ dish, isFavorite, postFavorite, auth }) {
                 : null
             }
           </CardImgOverlay>
-          <CardTitle>{dish.name}</CardTitle>
-          <CardText>{dish.description}</CardText>
+          <CardTitle style={{ fontSize: 20 }}>{dish.name}</CardTitle>
+          <CardText style={{ fontSize: 15 }}>{dish.description}</CardText>
         </CardBody>
       </Card>
     </div>
