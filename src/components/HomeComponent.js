@@ -22,11 +22,11 @@ function RenderCard ({ item, isLoading, errMess }) {
     return (
         <Card>
           <CardImg width="100%" src={baseUrl + item.image} />
-          <CardBody>
-            <CardTitle>{item.name}</CardTitle>
+          <CardBody style={ { background: 'rgb(230,230,250)' }}>
+            <CardTitle style={{ fontSize: 20 }}>{item.name}</CardTitle>
             {item.designation
               ? (
-              <CardSubtitle>{item.designation}</CardSubtitle>
+              <CardSubtitle style={{ fontSize: 15 }}>{item.designation}</CardSubtitle>
                 )
               : null}
             <CardText>{item.description}</CardText>
@@ -39,6 +39,10 @@ function RenderCard ({ item, isLoading, errMess }) {
 function Home (props) {
   return (
     <div className="container">
+      <div>
+        <h2>Promotion</h2>
+      </div>
+      <hr/>
       <div className="row align-items-start">
         <div className="col-12 col-md m-1">
           <RenderCard item = {props.dish}
