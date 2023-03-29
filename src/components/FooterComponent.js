@@ -20,7 +20,7 @@ function Footer () {
                         Om Shivai building wing-A2<br />
                         Borivali East Mumbai<br />
                         India<br />
-                        <i className="fa fa-phone fa-lg"></i>: +91 9834567856<br />
+                        <i className="fa fa-phone fa-lg"></i>: +91 9326321513<br />
                         <i className="fa fa-fax fa-lg"></i>: +91 8765224321<br />
                         <i className="fa fa-envelope fa-lg"></i>: <a href="mailto:confusion@food.net">
                             confusion@food.net</a>

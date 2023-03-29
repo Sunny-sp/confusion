@@ -41,8 +41,8 @@ function Contact (props) {
                     <address>
                     Om Shivai building wing-A2<br />
                     Borivali East Mumbai<br />
-                    <i className="fa fa-phone"></i>: +852 1234 5678<br />
-                    <i className="fa fa-fax"></i>: +852 8765 4321<br />
+                    <i className="fa fa-phone"></i>: +91 9326321513<br />
+                    <i className="fa fa-fax"></i>: +91 8765224321<br />
                     <i className="fa fa-envelope"></i>: <a href="mailto:confusion@food.net">confusion@food.net</a>
                     </address>
             </div>
